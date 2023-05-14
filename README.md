@@ -7,7 +7,7 @@ This is a rent calculator for the Iranian housing market.
 
 رهن کامل = یک هشتم قیمت ملک
 
-هر ۱ میلیون تومان ودیعه=۳۳ هزار تومان اجاره
+هر ۱ میلیون تومان ودیعه = ۳۳ هزار تومان اجاره
 
 دانلود (نسخه ویندوز)
 https://github.com/mfat/RentCalc/releases/download/v1.0/RentCalc.exe
