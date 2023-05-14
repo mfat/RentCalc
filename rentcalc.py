@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QPushButton, QGridLayout, QFrame
 
 
 class RentCalculator(QMainWindow):
@@ -9,64 +10,81 @@ class RentCalculator(QMainWindow):
         self.setWindowTitle("Rent Calculator")
 
         # Total property price
-        self.total_price_label = QLabel("Total Property Price:", self)
-        self.total_price_label.move(20, 20)
-        self.total_price_input = QLineEdit(self)
-        self.total_price_input.move(150, 20)
+        total_price_label = QLabel("Total Property Price:")
+        self.total_price_input = QLineEdit()
 
-        # Calculate total security deposit
-        self.total_security_deposit = 0
+        # Total security deposit
+        self.security_deposit_label = QLabel("Total Security Deposit:")
+        self.security_deposit_output = QLabel()
 
-        # Change deposit section
-        self.change_deposit_label = QLabel("Change Deposit", self)
-        self.change_deposit_label.move(20, 60)
+        # Change Deposit label
+        change_deposit_label = QLabel("Change Deposit")
+        change_deposit_label.setStyleSheet("color: red")
 
         # Deposit input
-        self.deposit_label = QLabel("Deposit:", self)
-        self.deposit_label.move(20, 90)
-        self.deposit_input = QLineEdit(self)
-        self.deposit_input.move(150, 90)
+        deposit_label = QLabel("Deposit:")
+        self.deposit_input = QLineEdit()
 
         # Monthly rent input
-        self.monthly_rent_label = QLabel("Monthly Rent:", self)
-        self.monthly_rent_label.move(20, 120)
-        self.monthly_rent_input = QLineEdit(self)
-        self.monthly_rent_input.move(150, 120)
+        monthly_rent_label = QLabel("Monthly Rent:")
+        self.monthly_rent_input = QLineEdit()
 
         # Calculate rent button
-        self.calculate_rent_button = QPushButton("Calculate Rent", self)
-        self.calculate_rent_button.move(20, 160)
-        self.calculate_rent_button.clicked.connect(self.calculate_rent)
-
-        # Rent and deposit section
-        self.change_rent_label = QLabel("Change Rent", self)
-        self.change_rent_label.move(20, 200)
+        calculate_rent_button = QPushButton("Calculate Rent")
+        calculate_rent_button.clicked.connect(self.calculate_rent)
 
         # Rent input
-        self.rent_label = QLabel("Rent:", self)
-        self.rent_label.move(20, 230)
-        self.rent_input = QLineEdit(self)
-        self.rent_input.move(150, 230)
+        rent_label = QLabel("Monthly Rent:")
+        self.rent_input = QLineEdit()
 
         # Calculate deposit button
-        self.calculate_deposit_button = QPushButton("Calculate Deposit", self)
-        self.calculate_deposit_button.move(20, 270)
-        self.calculate_deposit_button.clicked.connect(self.calculate_deposit)
+        calculate_deposit_button = QPushButton("Calculate Deposit")
+        calculate_deposit_button.clicked.connect(self.calculate_deposit)
 
         # Deposit output label
-        self.deposit_output_label = QLabel("Deposit:", self)
-        self.deposit_output_label.move(20, 310)
-        self.deposit_output = QLineEdit(self)
-        self.deposit_output.move(150, 310)
+        deposit_output_label = QLabel("Deposit:")
+        self.deposit_output = QLineEdit()
         self.deposit_output.setReadOnly(True)
 
-        self.setGeometry(100, 100, 400, 400)
+    
+        # Change Rent label
+        change_rent_label = QLabel("Change Rent")
+
+        # Create grid layout
+        grid = QGridLayout()
+        grid.setSpacing(10)
+
+        # Add widgets to grid layout
+        grid.addWidget(total_price_label, 0, 0)
+        grid.addWidget(self.total_price_input, 0, 1)
+        grid.addWidget(self.security_deposit_label, 1, 0)
+        grid.addWidget(self.security_deposit_output, 1, 1)
+        grid.addWidget(change_deposit_label, 2, 0, 1, 2)
+        grid.addWidget(deposit_label, 3, 0)
+        grid.addWidget(self.deposit_input, 3, 1)
+        grid.addWidget(calculate_rent_button, 4, 1)
+        grid.addWidget(monthly_rent_label, 5, 0)
+        grid.addWidget(self.monthly_rent_input, 5, 1)
+        grid.addWidget(change_rent_label, 7, 0, 1, 2)
+        grid.addWidget(rent_label, 8, 0)
+        grid.addWidget(self.rent_input, 8, 1)
+        grid.addWidget(calculate_deposit_button, 9, 1)
+        grid.addWidget(deposit_output_label, 10, 0)
+        grid.addWidget(self.deposit_output, 10, 1)
+
+        # Set central widget and layout
+        central_widget = QWidget()
+        central_widget.setLayout(grid)
+        self.setCentralWidget(central_widget)
+
+        self.setGeometry(100, 100, 400, 300)
         self.show()
 
     def calculate_rent(self):
         try:
             total_price = int(self.total_price_input.text().replace(",", ""))
             self.total_security_deposit = total_price / 8
+            self.security_deposit_output.setText("{:,.0f}".format(self.total_security_deposit))
             deposit = int(self.deposit_input.text().replace(",", ""))
             if deposit > self.total_security_deposit:
                 deposit = self.total_security_deposit
